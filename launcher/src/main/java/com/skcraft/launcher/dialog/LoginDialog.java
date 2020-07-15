@@ -102,10 +102,12 @@ public class LoginDialog extends JDialog {
         formPanel.addRow(new JLabel(), rememberPassCheck);
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(26, 13, 13, 13));
 
-        if (launcher.getConfig().isOfflineEnabled()) {
+        /*if (launcher.getConfig().isOfflineEnabled()) {
             buttonsPanel.addElement(offlineButton);
             buttonsPanel.addElement(Box.createHorizontalStrut(2));
-        }
+        }*/
+		buttonsPanel.addElement(offlineButton);
+        buttonsPanel.addElement(Box.createHorizontalStrut(2));
         buttonsPanel.addElement(recoverButton);
         buttonsPanel.addGlue();
         buttonsPanel.addElement(loginButton);
@@ -145,7 +147,14 @@ public class LoginDialog extends JDialog {
         offlineButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setResult(new OfflineSession(launcher.getProperties().getProperty("offlinePlayerName")));
+            	String playerName = launcher.getProperties().getProperty("offlinePlayerName");
+            	if (idCombo.getSelectedItem() != null) {
+            		playerName = idCombo.getSelectedItem().toString();
+            	}
+            	if (playerName.contains("@")) {
+            		playerName = launcher.getProperties().getProperty("offlinePlayerName");
+            	}
+                setResult(new OfflineSession(playerName));
                 removeListeners();
                 dispose();
             }
